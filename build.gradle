@@ -1,0 +1,143 @@
+plugins {
+	id 'java'
+	id 'pl.allegro.tech.build.axion-release' version '1.2.4'
+	id 'maven-publish'
+    id 'com.jfrog.bintray' version '1.2'
+    id 'findbugs'
+}
+
+scmVersion {
+    tag {
+        prefix = project.name
+    }
+
+	repository {
+        customUsername = "$System.env.AXION_RELEASE_GITHUB_TOKEN"
+        customPassword = ""
+    }
+
+	versionCreator 'versionWithBranch'
+
+    hooks {
+        pre 'fileUpdate', [file: 'README.md', pattern: {v,p -> /$project.name:\d+.\d+.\d+/}, replacement: {v, p -> "$project.name:$v"}]
+        pre 'commit'
+    }
+}
+
+project.group = 'com.fabahaba'
+project.version = scmVersion.version
+
+sourceCompatibility = 1.8
+
+repositories {
+    jcenter()
+    maven { url "http://oss.sonatype.org/content/repositories/snapshots" }
+    maven { url "http://repo.marketcetera.org/maven" }
+}
+
+dependencies {
+	compile 'com.fabahaba:fava:+'
+   
+	// DATABASE
+	compile 'com.fabahaba:jedipus:1.+'
+	
+	compile ('com.fabahaba:simple-kafka:0.1.+') {
+		exclude group: 'org.eclipse.jetty'
+	}
+	
+	compile 'com.palominolabs.metrics:metrics-new-relic:+'
+	
+   	// XCHANGE
+	compile 'com.github.mmazi:rescu:+'
+	compile group: "com.xeiam.xchange", name: "xchange-core", version: "+", changing: true
+	compile group: "com.xeiam.xchange", name: "xchange-anx", version: "+", changing: true
+	compile group: "com.xeiam.xchange", name: "xchange-bitcurex", version: "+", changing: true
+	compile group: "com.xeiam.xchange", name: "xchange-bitfinex", version: "+", changing: true	
+	compile group: "com.xeiam.xchange", name: "xchange-bitstamp", version: "+", changing: true
+	compile group: "com.xeiam.xchange", name: "xchange-bittrex", version: "+", changing: true
+	compile group: "com.xeiam.xchange", name: "xchange-btcchina", version: "+", changing: true
+	compile group: "com.xeiam.xchange", name: "xchange-btce", version: "+", changing: true
+	compile group: "com.xeiam.xchange", name: "xchange-bter", version: "+", changing: true
+	compile group: "com.xeiam.xchange", name: "xchange-campbx", version: "+", changing: true
+	compile group: "com.xeiam.xchange", name: "xchange-cexio", version: "+", changing: true
+	compile group: "com.xeiam.xchange", name: "xchange-coinbase", version: "+", changing: true
+	compile group: "com.xeiam.xchange", name: "xchange-cryptonit", version: "+", changing: true
+	compile group: "com.xeiam.xchange", name: "xchange-cryptsy", version: "+", changing: true
+	compile group: "com.xeiam.xchange", name: "xchange-hitbtc", version: "+", changing: true
+	compile group: "com.xeiam.xchange", name: "xchange-itbit", version: "+", changing: true
+	compile group: "com.xeiam.xchange", name: "xchange-kraken", version: "+", changing: true
+	compile group: "com.xeiam.xchange", name: "xchange-lakebtc", version: "+", changing: true
+	compile group: "com.xeiam.xchange", name: "xchange-poloniex", version: "+", changing: true
+   
+   testCompile 'junit:junit:+'
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+	from sourceSets.main.allSource
+	classifier = 'sources'
+}
+
+task javadocJar(type: Jar, dependsOn:javadoc) {
+	from javadoc.destinationDir
+	classifier 'javadoc'
+}
+
+publishing {
+	publications {
+		mavenJava( MavenPublication ) {
+			from components.java
+
+			artifact sourcesJar
+			artifact javadocJar
+        }
+    }
+}
+
+artifacts {
+	archives sourcesJar
+	archives javadocJar
+}
+
+bintray {
+	user = "$System.env.BINTRAY_USER"
+    key = "$System.env.BINTRAY_API_KEY"
+
+    publications = ['mavenJava']
+
+    pkg {
+        repo = 'libs'
+        name = project.name
+        desc = 'Reusable Guava/Java Framework Utils'
+        websiteUrl = 'https://github.com/jamespedwards42/' + project.name
+        vcsUrl = 'https://github.com/jamespedwards42/' + project.name
+        issueTrackerUrl = 'https://github.com/jamespedwards42/' + project.name + '/issues'
+        licenses = ["Apache-2.0"]
+        publish = true
+        version {
+            name = project.version
+            //desc =  ''
+            vcsTag = scmVersion.tag.prefix + '-' + project.version
+            gpg {
+                sign = true
+                passphrase = "$System.env.BINTRAY_GPG_PASSPHRASE"
+            }
+        }
+    }
+}
+
+bintrayUpload.onlyIf { !project.version.endsWith( 'SNAPSHOT' ) }
+
+findbugs {
+	toolVersion = "+"
+	reportsDir = file("$project.buildDir/findbugsReports")
+    effort = "max"
+    reportLevel = "medium"
+    ignoreFailures = false
+}
+
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}

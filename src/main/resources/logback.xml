@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+    <appender name="CONSOLE_APPENDER" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg %xEx%n %caller{2..3} </pattern>
+        </encoder> 
+    </appender>
+
+    <appender name="DETAIL_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/marketstem.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/marketstem-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>3</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <!-- <pattern>%d{HH:mm:ss.SSS} [${HOSTNAME}] [%thread] %-5level %logger{36} - %msg %xEx%n</pattern> -->	  
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg %xEx%n </pattern>
+        </encoder>
+
+    </appender>
+    
+    <root level="INFO">
+		<appender-ref ref="CONSOLE_APPENDER"/>
+		<appender-ref ref="DETAIL_APPENDER"/>
+	</root>	
+    
+	<!-- Define logging for organization applications only -->
+	<logger name="com.xeiam.xchange" level="ERROR" />
+	<!-- <logger name="si.mazi.rescu" level="TRACE" /> -->
+
+</configuration>

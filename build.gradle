@@ -4,6 +4,7 @@ plugins {
 	id 'maven-publish'
     id 'com.jfrog.bintray' version '1.2'
     id 'findbugs'
+    id "eu.appsatori.fatjar" version '0.3'
 }
 
 scmVersion {
@@ -70,6 +71,20 @@ dependencies {
 	compile group: "com.xeiam.xchange", name: "xchange-poloniex", version: "+", changing: true
    
    testCompile 'junit:junit:+'
+}
+
+fatJar {
+	// [baseName]-[appendix]-[version]-[classifier].[extension]
+	baseName project.name
+	appendix 'fat'
+	version project.version
+	classifier ''
+	extension 'jar'
+	zip64 = true
+	manifest {
+        attributes 'Main-Class': 'com.fabahaba.fava.service.ServiceRunner'
+    }
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA, META-INF/license/*' 
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

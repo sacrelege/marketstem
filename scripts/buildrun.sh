@@ -9,8 +9,8 @@ cd "$REPO_DIR"
 while : ; do
    git pull
    gradle clean fatJar
-   
-   pgrep -f marketstem | xargs kill -9 --
+
+   pgrep -f marketstem.*?jar | xargs kill -9 --
 
    [[ ! -f `ls -U build/libs/$PROJECT_NAME*.jar` ]] || break
 done

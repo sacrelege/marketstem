@@ -6,7 +6,7 @@ SCRIPTS_DIR="$REPO_DIR/scripts"
 echo "$SCRIPTS_DIR"
 cd "$REPO_DIR"
 git pull
-pgrep -f marketstem | xargs kill -9 --
+pgrep -f marketstem.*?jar | xargs kill -9 --
 bash "$SCRIPTS_DIR/run.sh"
 
 exit 0

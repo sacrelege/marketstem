@@ -15,8 +15,8 @@ import com.marketstem.exchanges.data.AssetPair;
 import com.marketstem.exchanges.data.AssetSymbol;
 import com.marketstem.services.marketdata.aggregation.AssetConverter;
 import com.marketstem.services.marketdata.aggregation.data.ConversionRate;
-import com.marketstem.services.rest.ParamUtils;
 import com.marketstem.services.rest.util.NewRelicUtils;
+import com.marketstem.services.rest.util.ParamUtils;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

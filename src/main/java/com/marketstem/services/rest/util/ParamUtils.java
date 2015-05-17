@@ -1,4 +1,4 @@
-package com.marketstem.services.rest;
+package com.marketstem.services.rest.util;
 
 import com.fabahaba.fava.logging.Loggable;
 import com.fabahaba.fava.serialization.gson.GsonUtils;

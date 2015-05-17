@@ -3,7 +3,6 @@
 PROJECT_NAME="marketstem"
 REPO_DIR=~/git/$PROJECT_NAME
 SCRIPTS_DIR="$REPO_DIR/scripts"
-echo "$SCRIPTS_DIR"
 cd "$REPO_DIR"
 git pull
 pgrep -f marketstem.*?jar | xargs kill -9 --

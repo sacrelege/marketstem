@@ -16,8 +16,8 @@ import com.marketstem.exchanges.data.PublicLimitOrder.PublicLimitOrderSerializer
 import com.marketstem.exchanges.data.Ticker;
 import com.marketstem.exchanges.data.Ticker.TickerMarshaller;
 import com.marketstem.serialization.Marshalling;
-import com.marketstem.services.rest.ParamUtils;
 import com.marketstem.services.rest.util.NewRelicUtils;
+import com.marketstem.services.rest.util.ParamUtils;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

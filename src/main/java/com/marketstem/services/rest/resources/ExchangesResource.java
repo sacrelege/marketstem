@@ -13,8 +13,8 @@ import com.marketstem.exchanges.Exchange;
 import com.marketstem.exchanges.ExchangeClient;
 import com.marketstem.exchanges.data.Asset;
 import com.marketstem.exchanges.data.AssetPair;
-import com.marketstem.services.rest.ParamUtils;
 import com.marketstem.services.rest.util.NewRelicUtils;
+import com.marketstem.services.rest.util.ParamUtils;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

@@ -3,6 +3,8 @@
 PROJECT_NAME="marketstem"
 INSTALL_DIR=~/$PROJECT_NAME
 REPO_DIR=~/git/$PROJECT_NAME
+
+mkdir -p "$INSTALL_DIR"
 cd "$INSTALL_DIR"
 
 JAR_OP="-jar $REPO_DIR/build/libs/$PROJECT_NAME*.jar"
@@ -10,7 +12,7 @@ SERVER_OPS="-server -XX:MaxMetaspaceSize=256m"
 WEB_SERVER_OPS="-javaagent:$INSTALL_DIR/newrelic/newrelic.jar -Dnewrelic.enable.java.8"
 GC_OPS="-XX:+UseConcMarkSweepGC -XX:+ScavengeBeforeFullGC -XX:+CMSScavengeBeforeRemark -XX:+CMSParallelRemarkEnabled -XX:+ParallelRefProcEnabled -XX:CMSInitiatingOccupancyFraction=80 -XX:+UseCMSInitiatingOccupancyOnly"
 
-if [[ -z $(pgrep -f "$INSTALL_DIR|gradle") ]]
+if [[ -z $(ps ax | egrep "$PROJECT_NAME.*jar|gradle" | grep 'grep' -v) ]]
     then
     rm -f "$INSTALL_DIR/nohup.out"
     systemMemory=$( awk '/MemTotal/{print $2}' /proc/meminfo )

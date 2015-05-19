@@ -2,10 +2,17 @@ plugins {
 	id 'java'
 	id 'pl.allegro.tech.build.axion-release' version '1.2.4'
 	id 'maven-publish'
-    id 'com.jfrog.bintray' version '1.2'
-    id 'findbugs'
-    id "eu.appsatori.fatjar" version '0.3'
-    id 'org.hidetake.ssh' version '1.1.3'
+	id 'com.jfrog.bintray' version '1.2'
+	id 'findbugs'
+	id "eu.appsatori.fatjar" version '0.3'
+	id 'org.hidetake.ssh' version '1.1.3'
+}
+
+configurations.all {
+	resolutionStrategy {
+		cacheDynamicVersionsFor 60, 'minutes'
+		cacheChangingModulesFor 60, 'minutes'
+	}
 }
 
 scmVersion {
@@ -39,22 +46,22 @@ repositories {
 
 dependencies {
 	compile 'com.fabahaba:fava:+'
-   
+
 	// DATABASE
-	compile 'com.fabahaba:jedipus:1.+'
-	
-	compile ('com.fabahaba:simple-kafka:0.1.+') {
+	compile 'com.fabahaba:jedipus:+'
+
+	compile ('com.fabahaba:simple-kafka:+') {
 		exclude group: 'org.eclipse.jetty'
 	}
-	
+
 	compile 'com.palominolabs.metrics:metrics-new-relic:+'
-	
+
    	// XCHANGE
 	compile 'com.github.mmazi:rescu:+'
 	compile group: "com.xeiam.xchange", name: "xchange-core", version: "+", changing: true
 	compile group: "com.xeiam.xchange", name: "xchange-anx", version: "+", changing: true
 	compile group: "com.xeiam.xchange", name: "xchange-bitcurex", version: "+", changing: true
-	compile group: "com.xeiam.xchange", name: "xchange-bitfinex", version: "+", changing: true	
+	compile group: "com.xeiam.xchange", name: "xchange-bitfinex", version: "+", changing: true
 	compile group: "com.xeiam.xchange", name: "xchange-bitstamp", version: "+", changing: true
 	compile group: "com.xeiam.xchange", name: "xchange-bittrex", version: "+", changing: true
 	compile group: "com.xeiam.xchange", name: "xchange-btcchina", version: "+", changing: true
@@ -70,7 +77,7 @@ dependencies {
 	compile group: "com.xeiam.xchange", name: "xchange-kraken", version: "+", changing: true
 	compile group: "com.xeiam.xchange", name: "xchange-lakebtc", version: "+", changing: true
 	compile group: "com.xeiam.xchange", name: "xchange-poloniex", version: "+", changing: true
-   
+
    testCompile 'junit:junit:+'
 }
 
@@ -85,7 +92,7 @@ fatJar {
 	manifest {
         attributes 'Main-Class': 'com.fabahaba.fava.service.ServiceRunner'
     }
-    exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA, META-INF/license/*' 
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA, META-INF/license/*'
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

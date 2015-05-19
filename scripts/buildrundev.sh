@@ -7,7 +7,6 @@ SCRIPTS_DIR="$REPO_DIR/scripts"
 cd "$REPO_DIR"
 
 while : ; do
-   git pull
    gradle clean fatJar
 
    ps ax | egrep "$PROJECT_NAME.*jar" | grep 'grep' -v | awk '{print $1}' | xargs kill -9 --
@@ -15,6 +14,6 @@ while : ; do
    [[ ! -f `ls -U build/libs/$PROJECT_NAME*.jar` ]] || break
 done
 
-bash "$SCRIPTS_DIR/run.sh"
+bash "$SCRIPTS_DIR/rundev.sh"
 
 exit 0

@@ -8,7 +8,7 @@ cd "$REPO_DIR"
 
 while : ; do
    git pull
-   gradle clean fatJar
+   gradle clean shadowJar
 
    ps ax | egrep "$PROJECT_NAME.*jar" | grep 'grep' -v | awk '{print $1}' | xargs kill -9 --
 

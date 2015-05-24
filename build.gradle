@@ -16,7 +16,7 @@ configurations.all {
 		eachDependency { DependencyResolveDetails details ->
 			if (details.requested.group == 'javax.ws.rs') {
 				details.useTarget group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '+'
-	      }
+	      	}
 		}
 	}
 }
@@ -174,4 +174,27 @@ tasks.withType(FindBugs) {
         xml.enabled = false
         html.enabled = true
     }
+}
+	
+task deploy << { 
+	file("servers.txt").eachLine{ line -> 
+		def serverInfoParts = line.split(":")
+		def serverName = serverInfoParts[0]
+		def serverHost = serverInfoParts[1]
+		remotes.create(serverName) {
+		    role(project.name)
+		    host = serverHost
+		    user = 'root'
+		    identity = file(System.getProperty('user.home') + '/.ssh/test_id_rsa')
+		    knownHosts = allowAnyHosts
+		}
+	}
+
+	ssh.run {
+		session(remotes.role(project.name)) {
+			execute 'curl http://localhost:8081/deployment/redeploy'
+			execute '/bin/bash -i -c "~/git/marketstem/scripts/buildrun.sh"'
+			execute 'sleep 30'
+		}
+	}
 }

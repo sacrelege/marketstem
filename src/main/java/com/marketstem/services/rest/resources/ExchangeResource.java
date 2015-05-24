@@ -27,9 +27,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Path("/api/{exchange}")
 @Produces(MediaType.APPLICATION_JSON)
@@ -50,12 +50,8 @@ public class ExchangeResource implements Loggable, ParamUtils {
         assetPairs
             .stream()
             .map(
-                assetPair -> {
-                  final java.util.Optional<String> optionalJson =
-                      exchange.getCachedMarketDepth(assetPair).map(GSON::toJson);
-                  return optionalJson;
-                }).filter(java.util.Optional::isPresent).map(java.util.Optional::get)
-            .collect(Collectors.joining(","));
+                assetPair -> exchange.getCachedMarketDepth(assetPair).map(GSON::toJson)
+                    .orElse(null)).filter(Objects::nonNull).collect(Collectors.joining(","));
 
     return "[" + redisJson + "]";
   }
@@ -64,15 +60,9 @@ public class ExchangeResource implements Loggable, ParamUtils {
       getExchangeTickers(final Exchange exchange, final Collection<AssetPair> assetPairs) {
 
     final String redisJson =
-        assetPairs
-            .stream()
-            .map(
-                assetPair -> {
-                  final java.util.Optional<String> optionalJson =
-                      exchange.getCachedTicker(assetPair).map(GSON::toJson);
-                  return optionalJson;
-                }).filter(java.util.Optional::isPresent).map(java.util.Optional::get)
-            .collect(Collectors.joining(","));
+        assetPairs.stream()
+            .map(assetPair -> exchange.getCachedTicker(assetPair).map(GSON::toJson).orElse(null))
+            .filter(Objects::nonNull).collect(Collectors.joining(","));
 
     return "[" + redisJson + "]";
   }
@@ -84,25 +74,13 @@ public class ExchangeResource implements Loggable, ParamUtils {
 
     if (marketStringsCleaned.isEmpty())
       return exchange.getCachedAssetPairs().orElse(Lists.newArrayList());
-    else {
-      final Set<AssetPair> assetPairs = Sets.newHashSet();
-      for (final String market : marketStringsCleaned.split(",")) {
-        AssetPair.fromString(market).ifPresent(assetPairs::add);
-      }
-      return assetPairs;
+
+    final Set<AssetPair> assetPairs = Sets.newHashSet();
+    for (final String market : marketStringsCleaned.split(",")) {
+      AssetPair.fromString(market).ifPresent(assetPairs::add);
     }
-  }
 
-  public Collection<Asset> assetsFromParamList(final Exchange exchange,
-      final Optional<String> assetsCommaList) {
-
-    final String assetStringsCleaned = cleanStringListParam(assetsCommaList);
-
-    if (assetStringsCleaned.isEmpty())
-      return exchange.getCachedAssets();
-
-    return Stream.of(assetStringsCleaned.split(",")).map(Asset::fromString)
-        .collect(Collectors.toSet());
+    return assetPairs;
   }
 
   @GET

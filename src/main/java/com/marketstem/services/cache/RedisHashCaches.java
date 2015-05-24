@@ -31,7 +31,7 @@ public enum RedisHashCaches {
       }.getType(), CacheBuilder.newBuilder()),
 
   AGGREGATE_TICKER(AggregateTickerSnapshot.AGGREGATE_TICKER_GSON, RedisExecutor.MARKETSTEM,
-      AssetPair.class, AggregateTickerSnapshot.class, CacheBuilder.newBuilder()
+      AssetPair.class, AggregateTickerSnapshot.class, CacheBuilder.newBuilder().maximumSize(1000)
           .expireAfterAccess(120, TimeUnit.SECONDS).refreshAfterWrite(30, TimeUnit.SECONDS),
       ExecutorUtils.newCachedThreadPool(RedisHashCache.class.getSimpleName() + "-AGGREGATE_TICKER"));
 

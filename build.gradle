@@ -46,6 +46,7 @@ repositories {
 
 dependencies {
 	compile 'com.fabahaba:fava:+'
+	compile 'ch.qos.logback:logback-classic:+'
 
 	// DATABASE
 	compile 'com.fabahaba:jedipus:+'

@@ -1,7 +1,6 @@
 package com.marketstem.exchanges;
 
 import com.fabahaba.fava.collect.EnumString;
-import com.google.common.base.Throwables;
 import com.marketstem.exchanges.clients.ANXPROClient;
 import com.marketstem.exchanges.clients.BTCChinaClient;
 import com.marketstem.exchanges.clients.BTCEClient;
@@ -45,14 +44,13 @@ import com.xeiam.xchange.kraken.KrakenExchange;
 import com.xeiam.xchange.lakebtc.LakeBTCExchange;
 import com.xeiam.xchange.poloniex.PoloniexExchange;
 
-import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public enum Exchange implements ExchangeDataCache {
+public enum Exchange {
 
   ANXPRO(ANXExchange.class, ANXPROClient.class),
   BITCUREX(BitcurexExchange.class, BitcurexClient.class),
@@ -73,35 +71,25 @@ public enum Exchange implements ExchangeDataCache {
   LAKEBTC(LakeBTCExchange.class, LakeBTCClient.class),
   POLONIEX(PoloniexExchange.class, PoloniexClient.class);
 
-  private final Class<? extends com.xeiam.xchange.Exchange> exchangeClass;
   private final Class<? extends ExchangeClient> exchangeClientClass;
-  private volatile ExchangeClient exchangeClient;
+  private final Class<? extends com.xeiam.xchange.Exchange> exchangeClass;
 
   private Exchange(final Class<? extends com.xeiam.xchange.Exchange> exchangeClass,
       final Class<? extends ExchangeClient> exchangeClientClass) {
-    this.exchangeClass = exchangeClass;
     this.exchangeClientClass = exchangeClientClass;
+    this.exchangeClass = exchangeClass;
   }
 
   public Class<? extends com.xeiam.xchange.Exchange> getExchangeClass() {
     return exchangeClass;
   }
 
-  public ExchangeClient getClient() {
-    if (exchangeClient != null)
-      return exchangeClient;
+  public ExchangeData getData() {
+    return ExchangeData.getData(exchangeClientClass, this);
+  }
 
-    synchronized (this) {
-      if (exchangeClient == null) {
-        try {
-          exchangeClient = exchangeClientClass.getConstructor(Exchange.class).newInstance(this);
-        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-            | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-          throw Throwables.propagate(e);
-        }
-      }
-    }
-    return exchangeClient;
+  public ExchangeClient getClient() {
+    return getData().getExchangeClient();
   }
 
   public Optional<Map<Object, BigDecimal>> getWallet() {
@@ -117,25 +105,25 @@ public enum Exchange implements ExchangeDataCache {
   }
 
   public Optional<AssetMarket> getMarketIfContainsBoth(final Asset assetA, final Asset assetB) {
-    return assetA.equals(assetB) ? Optional.empty() : getCachedAssetPairs().flatMap(
+    return assetA.equals(assetB) ? Optional.empty() : getData().getCachedAssetPairs().flatMap(
         pairs -> pairs.stream().filter(pair -> pair.contains(assetA) && pair.contains(assetB))
             .map(pair -> AssetMarket.fromAssets(assetA, assetB, pair.getPriceAsset())).findAny());
   }
 
   public Optional<Ticker> getTicker(final AssetPair assetPair) {
-    return cacheTicker(getClient().callForTicker(assetPair));
+    return getData().cacheTicker(getClient().callForTicker(assetPair));
   }
 
   public Optional<Map<AssetPair, Ticker>> getTickers() {
-    return cacheTickers(getClient().callForTickers());
+    return getData().cacheTickers(getClient().callForTickers());
   }
 
   public Optional<FullMarketDepth> getMarketDepth(final AssetPair assetPair) {
-    return cacheMarketDepth(getClient().callForMarketDepth(assetPair));
+    return getData().cacheMarketDepth(getClient().callForMarketDepth(assetPair));
   }
 
   public Optional<Map<AssetPair, FullMarketDepth>> getMarketDepths() {
-    return cacheMarketDepths(getClient().callForMarketDepths());
+    return getData().cacheMarketDepths(getClient().callForMarketDepths());
   }
 
   public Optional<List<PublicTrade>> getPublicTrades() {
@@ -152,9 +140,4 @@ public enum Exchange implements ExchangeDataCache {
 
   private static final Map<String, Exchange> fromString = EnumString.buildFromStringMap(Exchange
       .values());
-
-  @Override
-  public Exchange getExchange() {
-    return this;
-  }
 }

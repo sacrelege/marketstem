@@ -39,9 +39,9 @@ public class ExchangesResource implements Loggable, ParamUtils {
     try {
       final Map<Exchange, Collection<Asset>> exchangeAssets =
           exchangesString.isEmpty() ? Stream.of(Exchange.values()).collect(
-              Collectors.toMap(e -> e, Exchange::getCachedAssets)) : Stream
+              Collectors.toMap(e -> e, e -> e.getData().getCachedAssets())) : Stream
               .of(exchangesString.split(",")).map(Exchange::fromString).filter(Objects::nonNull)
-              .collect(Collectors.toMap(e -> e, Exchange::getCachedAssets));
+              .collect(Collectors.toMap(e -> e, e -> e.getData().getCachedAssets()));
 
       return ExchangeResource.GSON.toJson(exchangeAssets);
     } catch (final Exception e) {
@@ -54,15 +54,15 @@ public class ExchangesResource implements Loggable, ParamUtils {
     try {
       final Map<Exchange, Collection<AssetPair>> exchangeMarkets =
           exchangesString.isEmpty() ? Stream.of(Exchange.values()).collect(
-              Collectors.toMap(e -> e, e -> e.getCachedAssetPairs().orElse(Lists.newArrayList())))
-              : Arrays
-                  .asList(exchangesString.split(","))
-                  .stream()
-                  .map(Exchange::fromString)
-                  .filter(Objects::nonNull)
-                  .collect(
-                      Collectors.toMap(e -> e,
-                          e -> e.getCachedAssetPairs().orElse(Lists.newArrayList())));
+              Collectors.toMap(e -> e,
+                  e -> e.getData().getCachedAssetPairs().orElse(Lists.newArrayList()))) : Arrays
+              .asList(exchangesString.split(","))
+              .stream()
+              .map(Exchange::fromString)
+              .filter(Objects::nonNull)
+              .collect(
+                  Collectors.toMap(e -> e,
+                      e -> e.getData().getCachedAssetPairs().orElse(Lists.newArrayList())));
       return ExchangeResource.GSON.toJson(exchangeMarkets);
     } catch (final Exception e) {
       Loggable.logCatching(ExchangesResource.class, e);

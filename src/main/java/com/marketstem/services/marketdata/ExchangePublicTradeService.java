@@ -72,7 +72,9 @@ public class ExchangePublicTradeService extends LeaderService implements Retryab
       final LongAdder numResponses = new LongAdder();
       final ConcurrentMap<AssetPair, Long> localLastTradeIds = Maps.newConcurrentMap();
 
-      exchange.getCachedAssetPairs()
+      exchange
+          .getData()
+          .getCachedAssetPairs()
           .ifPresent(
               assetPairs -> assetPairs
                   .parallelStream()

@@ -50,7 +50,7 @@ public class ExchangeResource implements Loggable, ParamUtils {
         assetPairs
             .stream()
             .map(
-                assetPair -> exchange.getCachedMarketDepth(assetPair).map(GSON::toJson)
+                assetPair -> exchange.getData().getCachedMarketDepth(assetPair).map(GSON::toJson)
                     .orElse(null)).filter(Objects::nonNull).collect(Collectors.joining(","));
 
     return "[" + redisJson + "]";
@@ -60,9 +60,11 @@ public class ExchangeResource implements Loggable, ParamUtils {
       getExchangeTickers(final Exchange exchange, final Collection<AssetPair> assetPairs) {
 
     final String redisJson =
-        assetPairs.stream()
-            .map(assetPair -> exchange.getCachedTicker(assetPair).map(GSON::toJson).orElse(null))
-            .filter(Objects::nonNull).collect(Collectors.joining(","));
+        assetPairs
+            .stream()
+            .map(
+                assetPair -> exchange.getData().getCachedTicker(assetPair).map(GSON::toJson)
+                    .orElse(null)).filter(Objects::nonNull).collect(Collectors.joining(","));
 
     return "[" + redisJson + "]";
   }
@@ -73,7 +75,7 @@ public class ExchangeResource implements Loggable, ParamUtils {
     final String marketStringsCleaned = cleanStringListParam(assetPairsCommaList);
 
     if (marketStringsCleaned.isEmpty())
-      return exchange.getCachedAssetPairs().orElse(Lists.newArrayList());
+      return exchange.getData().getCachedAssetPairs().orElse(Lists.newArrayList());
 
     final Set<AssetPair> assetPairs = Sets.newHashSet();
     for (final String market : marketStringsCleaned.split(",")) {

@@ -29,7 +29,7 @@ public class MarketsResource implements ParamUtils {
       .build(AsyncCacheLoader.create(dummyKey -> {
         final Set<AssetPair> assetPairs = Sets.newHashSet();
         for (final Exchange exchange : Exchange.values()) {
-          exchange.getCachedAssetPairs().ifPresent(assetPairs::addAll);
+          exchange.getData().getCachedAssetPairs().ifPresent(assetPairs::addAll);
         }
         return ASSET_PAIR_MARSHALLER.toJsonArray(assetPairs).toString();
       }, true));

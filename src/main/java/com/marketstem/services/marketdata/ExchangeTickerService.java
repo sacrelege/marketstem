@@ -54,11 +54,14 @@ public class ExchangeTickerService extends LeaderService {
         publishTickers(validTickers);
       }
     } else {
-      exchange.getCachedAssetPairs().map(
-          assetPairs -> assetPairs.parallelStream().map(exchange::getTicker)
-              .filter(Optional::isPresent).map(Optional::get)
-              .filter(ticker -> ticker.getLast().isPresent() || ticker.getBid().isPresent())
-              .peek(ticker -> publishTickers(Lists.newArrayList(ticker))).count());
+      exchange
+          .getData()
+          .getCachedAssetPairs()
+          .map(
+              assetPairs -> assetPairs.parallelStream().map(exchange::getTicker)
+                  .filter(Optional::isPresent).map(Optional::get)
+                  .filter(ticker -> ticker.getLast().isPresent() || ticker.getBid().isPresent())
+                  .peek(ticker -> publishTickers(Lists.newArrayList(ticker))).count());
     }
   }
 

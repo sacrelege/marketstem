@@ -84,7 +84,9 @@ public class ExchangeDepthService extends LeaderService implements Retryable {
         KafkaClients.MARKETSTEM.sendAsync("depths", MARKET_DEPTH_GSON.toJson(newDepths));
       }
     } else {
-      exchange.getCachedAssetPairs()
+      exchange
+          .getData()
+          .getCachedAssetPairs()
           .ifPresent(
               assetPairs -> {
                 assetPairs

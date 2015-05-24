@@ -33,7 +33,6 @@ public class CryptsyClient extends BaseExchangeClient {
 
   public CryptsyClient(final Exchange exchange) {
     super(exchange, 2, 2, .2, .2, .2);
-    refreshCryptsyMarketIds();
   }
 
   private void refreshCryptsyMarketIds() {

@@ -77,7 +77,7 @@ public interface ExchangeClient extends MarketstemS3cured, Retryable {
 
                           xeiamExchangeClient.applySpecification(exchangeSpec);
 
-                          exchangeClient.getExchange().refreshCachedAssetPairs();
+                          exchangeClient.getExchange().getData().refreshCachedAssetPairs();
                           return xeiamExchangeClient;
                         });
                     return localExchangeClient;
@@ -217,7 +217,7 @@ public interface ExchangeClient extends MarketstemS3cured, Retryable {
           assets.add(pair.getPriceAsset());
         });
 
-        ExchangeDataCache.ASSETS.put(getExchange(), assets);
+        getExchange().getData().setAssets(assets);
       }
       return discoveredAssetPairs;
     });

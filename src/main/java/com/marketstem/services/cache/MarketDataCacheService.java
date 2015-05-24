@@ -50,7 +50,7 @@ public class MarketDataCacheService extends AbstractIdleService implements Logga
     try {
       final List<Ticker> tickers = ExchangeTickerService.TICKER_GSON.fromJson(message, TICKER_TYPE);
       tickers.stream().filter(ticker -> Objects.nonNull(ticker.getExchange()))
-          .forEach(ticker -> ticker.getExchange().cacheTicker(Optional.of(ticker)));
+          .forEach(ticker -> ticker.getExchange().getData().cacheTicker(Optional.of(ticker)));
     } catch (final Exception e) {
       Loggable.logCatching(MarketDataCacheService.class, e);
     }
@@ -61,7 +61,7 @@ public class MarketDataCacheService extends AbstractIdleService implements Logga
       final List<FullMarketDepth> depths =
           ExchangeDepthService.MARKET_DEPTH_GSON.fromJson(message, DEPTH_TYPE);
       depths.stream().filter(depth -> Objects.nonNull(depth.getExchange()))
-          .forEach(depth -> depth.getExchange().cacheMarketDepth(Optional.of(depth)));
+          .forEach(depth -> depth.getExchange().getData().cacheMarketDepth(Optional.of(depth)));
     } catch (final Exception e) {
       Loggable.logCatching(MarketDataCacheService.class, e);
     }

@@ -42,7 +42,7 @@ public class AssetsResource implements Loggable, ParamUtils {
       .build(AsyncCacheLoader.create(dummyKey -> {
         final Set<Asset> assets = Sets.newHashSet();
         for (final Exchange exchange : Exchange.values()) {
-          assets.addAll(exchange.getCachedAssets());
+          assets.addAll(exchange.getData().getCachedAssets());
         }
         return ASSET_MARSHALLER.toJsonArray(assets).toString();
       }, true));

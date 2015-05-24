@@ -13,6 +13,6 @@ GC_OPS="-XX:+UseConcMarkSweepGC -XX:+ScavengeBeforeFullGC -XX:+CMSScavengeBefore
 
 ps ax | egrep "$PROJECT_NAME.*jar" | grep 'grep' -v | awk '{print $1}' | xargs kill -9 --
 
-java $COMMON_OPS $JAR_OP $GC_OPS MARKETSTEM MARKET_DATA_CACHE AGGREGATE_TICKER
+java $COMMON_OPS $JAR_OP $GC_OPS MARKETSTEM MARKET_DATA_CACHE AGGREGATE_TICKER MARKETSTEM_HTTP
 
 exit 0

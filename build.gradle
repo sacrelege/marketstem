@@ -12,6 +12,12 @@ configurations.all {
 	resolutionStrategy {
 		cacheDynamicVersionsFor 60, 'minutes'
 		cacheChangingModulesFor 60, 'minutes'
+
+		eachDependency { DependencyResolveDetails details ->
+			if (details.requested.group == 'javax.ws.rs') {
+				details.useTarget group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '+'
+	      }
+		}
 	}
 }
 
@@ -93,11 +99,12 @@ jar {
 		attributes 'Main-Class': 'com.fabahaba.fava.service.ServiceRunner'
 	}
 	zip64 = true
-	exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA, META-INF/license/*'
 }
 
 shadowJar {
+	mergeServiceFiles()
 	appendix 'shadow'
+	exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA, LICENSE'
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

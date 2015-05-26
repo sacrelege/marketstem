@@ -6,3 +6,4 @@ build/
 /.project
 /logs/
 /servers.txt
+/secrets/

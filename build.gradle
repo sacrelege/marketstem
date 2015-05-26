@@ -6,7 +6,10 @@ plugins {
 	id 'findbugs'
 	id 'com.github.johnrengelman.shadow' version '1.2.1'
 	id 'org.hidetake.ssh' version '1.1.3'
+	id "com.monochromeroad.s3sync" version "0.8"
 }
+
+import com.monochromeroad.gradle.plugin.aws.s3.S3Sync
 
 configurations.all {
 	resolutionStrategy {
@@ -175,9 +178,25 @@ tasks.withType(FindBugs) {
         html.enabled = true
     }
 }
-	
-task deploy << { 
-	file("servers.txt").eachLine{ line -> 
+
+task deleteSecrets(type: Delete) {
+  delete fileTree(dir: "secrets")
+}
+
+task syncSecrets(type: S3Sync, dependsOn: deleteSecrets) {
+    accessKey = "$System.env.S3_MARKETSTEM_KEY"
+    secretKey = "$System.env.S3_MARKETSTEM_SECRET"
+
+    configFile "synchronizer.properties"
+
+    action = 'DOWN'
+
+    from "marketstem/repo-secrets"
+    into "secrets"
+}
+
+task deploy(dependsOn: syncSecrets) << {
+	file("servers.txt").eachLine{ line ->
 		def serverInfoParts = line.split(":")
 		def serverName = serverInfoParts[0]
 		def serverHost = serverInfoParts[1]
@@ -185,7 +204,7 @@ task deploy << {
 		    role(project.name)
 		    host = serverHost
 		    user = 'root'
-		    identity = file(System.getProperty('user.home') + '/.ssh/test_id_rsa')
+		    identity = file('secrets/marketstem_id_rsa')
 		    knownHosts = allowAnyHosts
 		}
 	}
@@ -194,7 +213,9 @@ task deploy << {
 		session(remotes.role(project.name)) {
 			execute 'curl http://localhost:8081/deployment/redeploy'
 			execute '/bin/bash -i -c "~/git/marketstem/scripts/buildrun.sh"'
-			execute 'sleep 30'
+			execute 'sleep 20'
 		}
 	}
 }
+
+deploy.onlyIf { !project.version.endsWith( 'SNAPSHOT' ) }

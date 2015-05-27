@@ -196,7 +196,7 @@ task syncSecrets(type: S3Sync, dependsOn: deleteSecrets) {
 }
 
 task deploy(dependsOn: syncSecrets) << {
-	file("servers.txt").eachLine{ line ->
+	file("secrets/servers.txt").eachLine{ line ->
 		def serverInfoParts = line.split(":")
 		def serverName = serverInfoParts[0]
 		def serverHost = serverInfoParts[1]
@@ -213,6 +213,7 @@ task deploy(dependsOn: syncSecrets) << {
 		session(remotes.role(project.name)) {
 			execute 'curl http://localhost:8081/deployment/redeploy'
 			execute '/bin/bash -i -c "~/git/marketstem/scripts/buildrun.sh"'
+			execute 'apt-get -y update; apt-get -y install; apt-get -y upgrade'
 			execute 'sleep 20'
 		}
 	}

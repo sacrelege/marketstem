@@ -7,3 +7,4 @@ build/
 /logs/
 /servers.txt
 /secrets/
+/newrelic/

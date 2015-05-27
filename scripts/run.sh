@@ -9,7 +9,7 @@ cd "$INSTALL_DIR"
 
 JAR_OP="-jar $REPO_DIR/build/libs/$PROJECT_NAME*.jar"
 SERVER_OPS="-server -XX:MaxMetaspaceSize=256m"
-WEB_SERVER_OPS="-javaagent:$INSTALL_DIR/newrelic/newrelic.jar -Dnewrelic.enable.java.8"
+WEB_SERVER_OPS="-javaagent:$REPO_DIR/newrelic/newrelic.jar -Dnewrelic.enable.java.8"
 GC_OPS="-XX:+UseConcMarkSweepGC -XX:+ScavengeBeforeFullGC -XX:+CMSScavengeBeforeRemark -XX:+CMSParallelRemarkEnabled -XX:+ParallelRefProcEnabled -XX:CMSInitiatingOccupancyFraction=80 -XX:+UseCMSInitiatingOccupancyOnly"
 
 if [[ -z $(ps ax | egrep "$PROJECT_NAME.*jar|shadowJar" | grep 'grep' -v) ]]

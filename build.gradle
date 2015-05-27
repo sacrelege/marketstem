@@ -222,3 +222,15 @@ task deploy(dependsOn: syncSecrets) << {
 }
 
 deploy.onlyIf { !project.version.endsWith( 'SNAPSHOT' ) }
+
+task downloadNewrelicAgent(type: S3Sync) {
+    accessKey = "$System.env.S3_MARKETSTEM_KEY"
+    secretKey = "$System.env.S3_MARKETSTEM_SECRET"
+
+    configFile "synchronizer.properties"
+
+    action = 'DOWN'
+
+    from "marketstem/newrelic"
+    into "newrelic"
+}

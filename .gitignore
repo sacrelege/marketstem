@@ -8,3 +8,4 @@ build/
 /servers.txt
 /secrets/
 /newrelic/
+console.out

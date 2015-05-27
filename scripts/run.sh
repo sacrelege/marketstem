@@ -1,11 +1,9 @@
 #!/bin/bash
 
 PROJECT_NAME="marketstem"
-INSTALL_DIR=~/$PROJECT_NAME
-REPO_DIR=~/git/$PROJECT_NAME
+REPO_DIR="$HOME/git/$PROJECT_NAME"
 
-mkdir -p "$INSTALL_DIR"
-cd "$INSTALL_DIR"
+cd "$REPO_DIR"
 
 JAR_OP="-jar $REPO_DIR/build/libs/$PROJECT_NAME*.jar"
 SERVER_OPS="-server -XX:MaxMetaspaceSize=256m"

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PROJECT_NAME="marketstem"
-REPO_DIR=~/git/$PROJECT_NAME
+REPO_DIR="$HOME/git/$PROJECT_NAME"
 SCRIPTS_DIR="$REPO_DIR/scripts"
 
 cd "$REPO_DIR"

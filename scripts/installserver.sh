@@ -8,6 +8,7 @@ apt-get -y install htop
 apt-get -y install vim
 apt-get -y install zip
 apt-get -y install ntp
+apt-get -y install curl
 apt-get -y install git
 
 NUM_REGEX='^[0-9]+$'

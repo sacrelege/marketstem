@@ -48,6 +48,7 @@ project.version = scmVersion.version
 sourceCompatibility = 1.8
 
 repositories {
+	maven { url  "http://dl.bintray.com/jamespedwards42/libs" }
     jcenter()
     maven { url "http://oss.sonatype.org/content/repositories/snapshots" }
     maven { url "http://repo.marketcetera.org/maven" }
@@ -55,6 +56,7 @@ repositories {
 
 dependencies {
 	compile 'com.fabahaba:fava:+'
+	compile 'com.fabahaba:byobuckets:+'
 	compile 'ch.qos.logback:logback-classic:+'
 
 	// DATABASE
@@ -144,7 +146,7 @@ bintray {
     pkg {
         repo = 'libs'
         name = project.name
-        desc = 'Reusable Guava/Java Framework Utils'
+        desc = ''
         websiteUrl = 'https://github.com/jamespedwards42/' + project.name
         vcsUrl = 'https://github.com/jamespedwards42/' + project.name
         issueTrackerUrl = 'https://github.com/jamespedwards42/' + project.name + '/issues'

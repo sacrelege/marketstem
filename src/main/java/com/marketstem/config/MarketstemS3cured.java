@@ -1,8 +1,8 @@
 package com.marketstem.config;
 
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.fabahaba.fava.encrypt.S3curedCache;
-import com.fabahaba.fava.rest.buckets.S3Bucketed;
+import com.fabahaba.byobuckets.s3.S3Bucketed;
+import com.fabahaba.byobuckets.s3.S3curedCache;
 import com.google.gson.Gson;
 import com.marketstem.serialization.Marshalling;
 

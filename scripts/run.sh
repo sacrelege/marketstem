@@ -12,8 +12,8 @@ GC_OPS="-XX:+UseConcMarkSweepGC -XX:+ScavengeBeforeFullGC -XX:+CMSScavengeBefore
 
 if [[ -z $(ps ax | egrep "$PROJECT_NAME.*jar|shadowJar" | grep 'grep' -v) ]]
     then
-    rm -f "$INSTALL_DIR/nohup.out"
-    systemMemory=$( awk '/MemTotal/{print $2}' /proc/meminfo )
+    rm -f "$REPO_DIR/console.out"
+    systemMemory=$(awk '/MemTotal/{print $2}' /proc/meminfo)
 
     if [ "$systemMemory" -gt 2000000 ]
       then

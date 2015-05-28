@@ -2,7 +2,6 @@
 
 PROJECT_NAME="marketstem"
 REPO_DIR="$HOME/git/$PROJECT_NAME"
-SCRIPTS_DIR="$REPO_DIR/scripts"
 
 cd "$REPO_DIR"
 
@@ -14,6 +13,6 @@ while : ; do
    [[ ! -f `ls -U build/libs/$PROJECT_NAME*.jar` ]] || break
 done
 
-bash "$SCRIPTS_DIR/rundev.sh"
+bash "$REPO_DIR/scripts/rundev.sh"
 
 exit 0

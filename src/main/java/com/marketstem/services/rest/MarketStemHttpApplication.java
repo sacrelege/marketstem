@@ -3,7 +3,7 @@ package com.marketstem.services.rest;
 import com.codahale.metrics.JmxReporter;
 import com.marketstem.services.rest.resources.AggregateTickerResource;
 import com.marketstem.services.rest.resources.AssetsResource;
-import com.marketstem.services.rest.resources.DeploymentResource;
+import com.marketstem.services.rest.resources.ServerResource;
 import com.marketstem.services.rest.resources.ExchangeResource;
 import com.marketstem.services.rest.resources.ExchangesResource;
 import com.marketstem.services.rest.resources.MarketsResource;
@@ -42,7 +42,7 @@ public class MarketStemHttpApplication extends Application<MarketStemConfigurati
     environment.register(new ExchangesResource());
     environment.register(new AssetsResource());
     environment.register(new MarketsResource());
-    environment.register(new DeploymentResource());
+    environment.register(new ServerResource());
   }
 
   private void registerProviders(final JerseyEnvironment environment) {

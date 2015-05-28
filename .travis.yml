@@ -1,7 +1,10 @@
 language: java
 
 jdk:
-- oraclejdk8
+   - oraclejdk8
 
+script:
+   - test $TRAVIS_BRANCH == "master" && gradle check
+   
 after_success:
-- gradle deploy
+   - test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "master" && gradle deploy

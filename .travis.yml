@@ -4,7 +4,7 @@ jdk:
    - oraclejdk8
 
 script:
-   - test $TRAVIS_BRANCH == "master" && gradle check
-   
+   - if [ "$TRAVIS_BRANCH" == "master" ]; then gradle check; fi
+
 after_success:
    - test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "master" && gradle deploy

@@ -47,7 +47,7 @@ public class ServerResource implements ParamUtils {
   @Path("is_healthy")
   public boolean isHealthy() {
     if (unhealthyOrDeploying == null) {
-      synchronized (RunscopeClients.MARKETSTEM) {
+      synchronized (this) {
         try {
           if (unhealthyOrDeploying == null) {
             ServerResource.initTests();

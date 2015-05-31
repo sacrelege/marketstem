@@ -33,6 +33,14 @@ public class ServerResource implements ParamUtils {
 
   private volatile Boolean unhealthyOrDeploying = null;
 
+  private ServerResource() {}
+
+  private static final ServerResource singleton = new ServerResource();
+
+  public static ServerResource getResource() {
+    return singleton;
+  }
+
   @GET
   @Path("redeploy")
   public boolean redeploy(@Context final HttpServletRequest request) throws IOException {

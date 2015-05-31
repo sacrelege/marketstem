@@ -9,11 +9,14 @@ import java.util.List;
 
 public class MarketStemConfiguration extends Configuration {
 
+  public static final int PORT = 8081;
+  public static final int ADMIN_PORT = 8082;
+
   public MarketStemConfiguration() {
     super();
     final List<ConnectorFactory> connectorFactories =
         ((DefaultServerFactory) getServerFactory()).getApplicationConnectors();
-    ((HttpConnectorFactory) connectorFactories.get(0)).setPort(8081);
+    ((HttpConnectorFactory) connectorFactories.get(0)).setPort(PORT);
 
     // Keystores.MARKETSTEM_COM.ensureExists();
     //
@@ -26,6 +29,6 @@ public class MarketStemConfiguration extends Configuration {
     // connectorFactories.add( httpsConfig );
 
     ((HttpConnectorFactory) ((DefaultServerFactory) getServerFactory()).getAdminConnectors().get(0))
-        .setPort(8082);
+        .setPort(ADMIN_PORT);
   }
 }

@@ -57,6 +57,8 @@ repositories {
 dependencies {
 	compile 'com.fabahaba:fava:+'
 	compile 'com.fabahaba:byobuckets:+'
+	compile 'com.fabahaba:freegeoip-java-client:+'
+	compile 'com.fabahaba:runscope-java-client:+'
 	compile 'ch.qos.logback:logback-classic:+'
 
 	// DATABASE

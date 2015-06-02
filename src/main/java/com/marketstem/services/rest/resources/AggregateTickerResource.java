@@ -1,6 +1,7 @@
 package com.marketstem.services.rest.resources;
 
 import com.codahale.metrics.annotation.Timed;
+import com.fabahaba.dropwizard.utils.QueryParamUtils;
 import com.fabahaba.jedipus.cache.RedisHashCache;
 import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
@@ -9,7 +10,6 @@ import com.marketstem.services.cache.RedisHashCaches;
 import com.marketstem.services.marketdata.aggregation.data.AggregateTickerSnapshot;
 import com.marketstem.services.marketdata.aggregation.data.AggregateTickerSnapshot.AggregateTickerSnapshotMarshaller;
 import com.marketstem.services.rest.util.NewRelicUtils;
-import com.marketstem.services.rest.util.ParamUtils;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 @Path("/api/aggregate")
 @Produces(MediaType.APPLICATION_JSON)
-public class AggregateTickerResource implements ParamUtils {
+public class AggregateTickerResource {
 
   private static final RedisHashCache<AssetPair, AggregateTickerSnapshot> CACHED_AGGREGATE_TICKERS =
       RedisHashCaches.AGGREGATE_TICKER.getMap();
@@ -55,7 +55,7 @@ public class AggregateTickerResource implements ParamUtils {
 
   public Collection<AssetPair> assetPairsFromParamList(final Optional<String> assetPairsCommaList) {
 
-    final String marketStringsCleaned = cleanStringListParam(assetPairsCommaList);
+    final String marketStringsCleaned = QueryParamUtils.cleanStringListParam(assetPairsCommaList);
     final Set<AssetPair> assetPairs = Sets.newHashSet();
     for (final String market : marketStringsCleaned.split(",")) {
       AssetPair.fromString(market).ifPresent(assetPairs::add);

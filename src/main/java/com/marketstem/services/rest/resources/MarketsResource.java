@@ -8,7 +8,6 @@ import com.google.common.collect.Sets;
 import com.marketstem.exchanges.Exchange;
 import com.marketstem.exchanges.data.AssetPair;
 import com.marketstem.exchanges.data.AssetPair.AssetPairMarshaller;
-import com.marketstem.services.rest.util.ParamUtils;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -20,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 @Path("/api/markets")
 @Produces(MediaType.APPLICATION_JSON)
-public class MarketsResource implements ParamUtils {
+public class MarketsResource {
 
   private static final AssetPairMarshaller ASSET_PAIR_MARSHALLER = new AssetPairMarshaller();
 

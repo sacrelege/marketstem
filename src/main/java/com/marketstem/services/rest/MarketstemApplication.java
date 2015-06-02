@@ -1,14 +1,14 @@
 package com.marketstem.services.rest;
 
 import com.codahale.metrics.JmxReporter;
+import com.fabahaba.dropwizard.healthchecks.DeploymentResource;
+import com.fabahaba.dropwizard.healthchecks.RunscopeHealthCheck;
 import com.fabahaba.runscope.client.RunscopeClient;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import com.google.common.util.concurrent.RateLimiter;
-import com.marketstem.services.rest.health.RunscopeHealthCheck;
 import com.marketstem.services.rest.resources.AggregateTickerResource;
 import com.marketstem.services.rest.resources.AssetsResource;
-import com.marketstem.services.rest.resources.DeploymentResource;
 import com.marketstem.services.rest.resources.ExchangeResource;
 import com.marketstem.services.rest.resources.ExchangesResource;
 import com.marketstem.services.rest.resources.MarketsResource;

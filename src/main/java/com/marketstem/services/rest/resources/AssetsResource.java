@@ -1,6 +1,7 @@
 package com.marketstem.services.rest.resources;
 
 import com.codahale.metrics.annotation.Timed;
+import com.fabahaba.dropwizard.utils.QueryParamUtils;
 import com.fabahaba.fava.cache.AsyncCacheLoader;
 import com.fabahaba.fava.logging.Loggable;
 import com.google.common.base.Optional;
@@ -16,7 +17,6 @@ import com.marketstem.exchanges.data.AssetSymbol;
 import com.marketstem.services.marketdata.aggregation.AssetConverter;
 import com.marketstem.services.marketdata.aggregation.data.ConversionRate;
 import com.marketstem.services.rest.util.NewRelicUtils;
-import com.marketstem.services.rest.util.ParamUtils;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 
 @Path("/api/assets")
 @Produces(MediaType.APPLICATION_JSON)
-public class AssetsResource implements Loggable, ParamUtils {
+public class AssetsResource implements Loggable {
 
   private static final AssetMarshaller ASSET_MARSHALLER = new AssetMarshaller();
 
@@ -80,7 +80,7 @@ public class AssetsResource implements Loggable, ParamUtils {
     NewRelicUtils.addOptionalCustomNumberParameter("amount", amount);
     NewRelicUtils.addOptionalCustomStringParameter("to", toAssetsString);
 
-    final String cleanToAssetsString = cleanStringListParam(toAssetsString);
+    final String cleanToAssetsString = QueryParamUtils.cleanStringListParam(toAssetsString);
     final Map<Asset, String> convertedAmounts = Maps.newHashMap();
     for (final String toAsset : cleanToAssetsString.split(",")) {
       if (toAsset.isEmpty()) {

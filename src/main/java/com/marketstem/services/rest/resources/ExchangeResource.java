@@ -1,6 +1,7 @@
 package com.marketstem.services.rest.resources;
 
 import com.codahale.metrics.annotation.Timed;
+import com.fabahaba.dropwizard.utils.QueryParamUtils;
 import com.fabahaba.fava.logging.Loggable;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
@@ -17,7 +18,6 @@ import com.marketstem.exchanges.data.Ticker;
 import com.marketstem.exchanges.data.Ticker.TickerMarshaller;
 import com.marketstem.serialization.Marshalling;
 import com.marketstem.services.rest.util.NewRelicUtils;
-import com.marketstem.services.rest.util.ParamUtils;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 
 @Path("/api/{exchange}")
 @Produces(MediaType.APPLICATION_JSON)
-public class ExchangeResource implements Loggable, ParamUtils {
+public class ExchangeResource implements Loggable {
 
   public static final Gson GSON = Marshalling.BASE_GSON_BUILDER
       .registerTypeAdapter(PublicLimitOrder.class, new PublicLimitOrderSerializer())
@@ -72,7 +72,7 @@ public class ExchangeResource implements Loggable, ParamUtils {
   public Collection<AssetPair> assetPairsFromParamList(final Exchange exchange,
       final Optional<String> assetPairsCommaList) {
 
-    final String marketStringsCleaned = cleanStringListParam(assetPairsCommaList);
+    final String marketStringsCleaned = QueryParamUtils.cleanStringListParam(assetPairsCommaList);
 
     if (marketStringsCleaned.isEmpty())
       return exchange.getData().getCachedAssetPairs().orElse(Lists.newArrayList());

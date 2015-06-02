@@ -13,8 +13,8 @@ import com.monochromeroad.gradle.plugin.aws.s3.S3Sync
 
 configurations.all {
 	resolutionStrategy {
-		cacheDynamicVersionsFor 60, 'minutes'
-		cacheChangingModulesFor 60, 'minutes'
+		cacheDynamicVersionsFor 30, 'minutes'
+		cacheChangingModulesFor 30, 'minutes'
 
 		eachDependency { DependencyResolveDetails details ->
 			if (details.requested.group == 'javax.ws.rs') {
@@ -57,7 +57,7 @@ repositories {
 dependencies {
 	compile 'com.fabahaba:fava:+'
 	compile 'com.fabahaba:byobuckets:+'
-	compile 'com.fabahaba:runscope-java-client:+'
+	compile 'com.fabahaba:dropwizard-utils:+'
 	compile 'ch.qos.logback:logback-classic:+'
 
 	// DATABASE
@@ -217,7 +217,7 @@ task deploy(dependsOn: syncSecrets) << {
 			execute 'curl http://localhost:8081/deployment/redeploy'
 			execute '/bin/bash -i -c "~/git/marketstem/scripts/buildrun.sh"'
 			execute 'apt-get -y update; apt-get -y install; apt-get -y upgrade'
-			execute 'while [ $(curl -I --write-out %{http_code} --silent --output /dev/null localhost:8082/healthcheck) -ne 200 ] ; do sleep 1; done'
+			execute 'while [ $(curl --write-out %{http_code} --silent --output /dev/null localhost:8082/healthcheck) -ne 200 ] ; do sleep 1; done'
 		}
 	}
 }

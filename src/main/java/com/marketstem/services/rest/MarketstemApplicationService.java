@@ -1,6 +1,6 @@
 package com.marketstem.services.rest;
 
-import com.fabahaba.fava.service.dropwizard.ApplicationService;
+import com.fabahaba.dropwizard.service.ApplicationService;
 
 public class MarketstemApplicationService extends ApplicationService<MarketstemApplication> {
 

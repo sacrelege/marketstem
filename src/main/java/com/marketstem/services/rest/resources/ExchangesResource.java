@@ -1,6 +1,7 @@
 package com.marketstem.services.rest.resources;
 
 import com.codahale.metrics.annotation.Timed;
+import com.fabahaba.dropwizard.utils.QueryParamUtils;
 import com.fabahaba.fava.cache.AsyncCacheLoader;
 import com.fabahaba.fava.logging.Loggable;
 import com.google.common.base.Optional;
@@ -14,7 +15,6 @@ import com.marketstem.exchanges.ExchangeClient;
 import com.marketstem.exchanges.data.Asset;
 import com.marketstem.exchanges.data.AssetPair;
 import com.marketstem.services.rest.util.NewRelicUtils;
-import com.marketstem.services.rest.util.ParamUtils;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -33,7 +33,7 @@ import java.util.stream.Stream;
 
 @Path("/api/exchanges")
 @Produces(MediaType.APPLICATION_JSON)
-public class ExchangesResource implements Loggable, ParamUtils {
+public class ExchangesResource implements Loggable {
 
   private static final Function<String, String> GET_ASSETS = exchangesString -> {
     try {
@@ -122,7 +122,8 @@ public class ExchangesResource implements Loggable, ParamUtils {
 
     NewRelicUtils.addOptionalCustomStringParameter("exchanges", exchangesStrings);
 
-    return ExchangesResource.ASSETS_CACHE.getUnchecked(cleanStringListParam(exchangesStrings));
+    return ExchangesResource.ASSETS_CACHE.getUnchecked(QueryParamUtils
+        .cleanStringListParam(exchangesStrings));
   }
 
   @GET
@@ -132,7 +133,8 @@ public class ExchangesResource implements Loggable, ParamUtils {
 
     NewRelicUtils.addOptionalCustomStringParameter("exchanges", exchangesStrings);
 
-    return ExchangesResource.MARKETS_CACHE.getUnchecked(cleanStringListParam(exchangesStrings));
+    return ExchangesResource.MARKETS_CACHE.getUnchecked(QueryParamUtils
+        .cleanStringListParam(exchangesStrings));
   }
 
   @GET
@@ -143,6 +145,7 @@ public class ExchangesResource implements Loggable, ParamUtils {
 
     NewRelicUtils.addOptionalCustomStringParameter("exchanges", exchangesStrings);
 
-    return ExchangesResource.ALIASES_CACHE.getUnchecked(cleanStringListParam(exchangesStrings));
+    return ExchangesResource.ALIASES_CACHE.getUnchecked(QueryParamUtils
+        .cleanStringListParam(exchangesStrings));
   }
 }

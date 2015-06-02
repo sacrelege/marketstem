@@ -51,7 +51,8 @@ public class MarketstemApplication extends Application<MarketstemConfiguration> 
   private void registerHealthChecks(final Environment environment) throws MalformedURLException,
       IOException {
     final String wanIp =
-        Resources.asCharSource(new URL("http://checkip.amazonaws.com"), Charsets.UTF_8).read();
+        Resources.asCharSource(new URL("http://checkip.amazonaws.com"), Charsets.UTF_8).read()
+            .trim();
     final String baseApiUrl = "http://" + wanIp + ":" + MarketstemConfiguration.PORT + "/api/";
 
     final RunscopeClient runscope =

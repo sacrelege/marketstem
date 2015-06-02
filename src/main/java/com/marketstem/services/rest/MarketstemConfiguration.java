@@ -7,12 +7,12 @@ import io.dropwizard.server.DefaultServerFactory;
 
 import java.util.List;
 
-public class MarketStemConfiguration extends Configuration {
+public class MarketstemConfiguration extends Configuration {
 
   public static final int PORT = 8081;
   public static final int ADMIN_PORT = 8082;
 
-  public MarketStemConfiguration() {
+  public MarketstemConfiguration() {
     super();
     final List<ConnectorFactory> connectorFactories =
         ((DefaultServerFactory) getServerFactory()).getApplicationConnectors();

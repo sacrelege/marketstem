@@ -10,7 +10,7 @@ import com.marketstem.services.marketdata.ExchangeDepthService;
 import com.marketstem.services.marketdata.ExchangePublicTradeService;
 import com.marketstem.services.marketdata.ExchangeTickerService;
 import com.marketstem.services.marketdata.aggregation.AggregateTickerService;
-import com.marketstem.services.rest.MarketStemHttpService;
+import com.marketstem.services.rest.MarketstemApplicationService;
 
 import java.util.EnumSet;
 import java.util.Set;
@@ -44,7 +44,7 @@ public class ServiceLoaders {
 
     @Override
     public Set<Service> loadServices() {
-      return Sets.newHashSet(MarketStemHttpService.getService());
+      return Sets.newHashSet(MarketstemApplicationService.getService());
     }
   }
 

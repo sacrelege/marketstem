@@ -1,12 +1,18 @@
 package com.marketstem.services.rest;
 
 import com.codahale.metrics.JmxReporter;
+import com.fabahaba.runscope.client.RunscopeClient;
+import com.google.common.base.Charsets;
+import com.google.common.io.Resources;
+import com.google.common.util.concurrent.RateLimiter;
+import com.marketstem.services.rest.health.RunscopeHealthCheck;
 import com.marketstem.services.rest.resources.AggregateTickerResource;
 import com.marketstem.services.rest.resources.AssetsResource;
+import com.marketstem.services.rest.resources.DeploymentResource;
 import com.marketstem.services.rest.resources.ExchangeResource;
 import com.marketstem.services.rest.resources.ExchangesResource;
 import com.marketstem.services.rest.resources.MarketsResource;
-import com.marketstem.services.rest.resources.ServerResource;
+import com.marketstem.services.rest.testing.RunscopeClients;
 
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.glassfish.jersey.message.internal.FormProvider;
@@ -19,21 +25,45 @@ import io.dropwizard.setup.Environment;
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.time.Duration;
 import java.util.EnumSet;
 
-public class MarketStemHttpApplication extends Application<MarketStemConfiguration> {
+public class MarketstemApplication extends Application<MarketstemConfiguration> {
 
   @Override
-  public void initialize(final Bootstrap<MarketStemConfiguration> bootstrap) {}
+  public void initialize(final Bootstrap<MarketstemConfiguration> bootstrap) {}
 
   @Override
-  public void run(final MarketStemConfiguration configuration, final Environment environment) {
+  public void run(final MarketstemConfiguration configuration, final Environment environment)
+      throws MalformedURLException, IOException {
     configureCrossOriginFilter(environment, "/*");
 
     registerResources(environment.jersey());
     registerProviders(environment.jersey());
+    registerHealthChecks(environment);
 
     JmxReporter.forRegistry(environment.metrics()).build().start();
+  }
+
+  private void registerHealthChecks(final Environment environment) throws MalformedURLException,
+      IOException {
+    final String wanIp =
+        Resources.asCharSource(new URL("http://checkip.amazonaws.com"), Charsets.UTF_8).read();
+    final String baseApiUrl = "http://" + wanIp + ":" + MarketstemConfiguration.PORT + "/api/";
+
+    final RunscopeClient runscope =
+        RunscopeClients.MARKETSTEM.create(t -> t.query("URL", baseApiUrl));
+
+    final RateLimiter runTestsRateLimiter =
+        RateLimiter.create(1 / (double) Duration.ofHours(6).getSeconds());
+
+    environment.healthChecks().register("runscope",
+        new RunscopeHealthCheck.Builder(runscope, runTestsRateLimiter).build());
+
+    environment.healthChecks().register("deployment", DeploymentResource.getResource());
   }
 
   private void registerResources(final JerseyEnvironment environment) {
@@ -42,7 +72,7 @@ public class MarketStemHttpApplication extends Application<MarketStemConfigurati
     environment.register(new ExchangesResource());
     environment.register(new AssetsResource());
     environment.register(new MarketsResource());
-    environment.register(ServerResource.getResource());
+    environment.register(DeploymentResource.getResource());
   }
 
   private void registerProviders(final JerseyEnvironment environment) {

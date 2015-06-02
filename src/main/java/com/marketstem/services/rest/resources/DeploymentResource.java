@@ -6,7 +6,6 @@ import com.marketstem.services.rest.util.ParamUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
-import javax.ws.rs.HEAD;
 import javax.ws.rs.Path;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
@@ -36,15 +35,6 @@ public class DeploymentResource extends HealthCheck implements ParamUtils {
       return deploying = true;
 
     throw new WebApplicationException(Response.status(Response.Status.FORBIDDEN).build());
-  }
-
-  @HEAD
-  @Path("is_healthy")
-  public boolean isHealthy() {
-    if (deploying)
-      throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).build());
-
-    return true;
   }
 
   @Override

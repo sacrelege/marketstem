@@ -217,7 +217,7 @@ task deploy(dependsOn: syncSecrets) << {
 			execute 'curl http://localhost:8081/deployment/redeploy'
 			execute '/bin/bash -i -c "~/git/marketstem/scripts/buildrun.sh"'
 			execute 'apt-get -y update; apt-get -y install; apt-get -y upgrade'
-			execute 'while [ $(curl -I --write-out %{http_code} --silent --output /dev/null localhost:8081/deployment/is_healthy) -ne 200 ] ; do sleep 1; done'
+			execute 'while [ $(curl -I --write-out %{http_code} --silent --output /dev/null localhost:8082/healthcheck) -ne 200 ] ; do sleep 1; done'
 		}
 	}
 }

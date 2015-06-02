@@ -3,9 +3,8 @@ package com.marketstem.services.rest;
 import com.codahale.metrics.JmxReporter;
 import com.fabahaba.dropwizard.healthchecks.DeploymentResource;
 import com.fabahaba.dropwizard.healthchecks.RunscopeHealthCheck;
+import com.fabahaba.fava.system.HostUtils;
 import com.fabahaba.runscope.client.RunscopeClient;
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
 import com.google.common.util.concurrent.RateLimiter;
 import com.marketstem.services.rest.resources.AggregateTickerResource;
 import com.marketstem.services.rest.resources.AssetsResource;
@@ -27,7 +26,6 @@ import javax.servlet.FilterRegistration;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.time.Duration;
 import java.util.EnumSet;
 
@@ -50,10 +48,9 @@ public class MarketstemApplication extends Application<MarketstemConfiguration> 
 
   private void registerHealthChecks(final Environment environment) throws MalformedURLException,
       IOException {
-    final String wanIp =
-        Resources.asCharSource(new URL("http://checkip.amazonaws.com"), Charsets.UTF_8).read()
-            .trim();
-    final String baseApiUrl = "http://" + wanIp + ":" + MarketstemConfiguration.PORT + "/api/";
+
+    final String baseApiUrl =
+        "http://" + HostUtils.getWanIp() + ":" + MarketstemConfiguration.PORT + "/api/";
 
     final RunscopeClient runscope =
         RunscopeClients.MARKETSTEM.create(t -> t.query("URL", baseApiUrl));

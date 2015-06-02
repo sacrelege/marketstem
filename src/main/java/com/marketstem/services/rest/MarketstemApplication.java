@@ -59,7 +59,7 @@ public class MarketstemApplication extends Application<MarketstemConfiguration> 
         RateLimiter.create(1 / (double) Duration.ofHours(6).getSeconds());
 
     environment.healthChecks().register("runscope",
-        new RunscopeHealthCheck.Builder(runscope, runTestsRateLimiter).build());
+        RunscopeHealthCheck.startBuilding(runscope, runTestsRateLimiter).build());
 
     environment.healthChecks().register("deployment", DeploymentResource.getResource());
   }

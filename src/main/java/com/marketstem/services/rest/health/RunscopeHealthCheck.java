@@ -144,7 +144,7 @@ public class RunscopeHealthCheck extends HealthCheck implements Retryable {
         } catch (final FeignException e) {
           final int[] numFailures =
               numRetries.computeIfAbsent(testRun.getTestRunId(), k -> new int[] { 1 });
-          if (++numFailures[0] > numCheckTestRetries)
+          if (numFailures[0]++ >= numCheckTestRetries)
             throw e;
 
           Loggable.logError(DeploymentResource.class, e);
@@ -198,7 +198,7 @@ public class RunscopeHealthCheck extends HealthCheck implements Retryable {
               triggerUrl -> {
                 final String[] triggerUrlParts = triggerUrl.split("/");
                 if (triggerUrlParts.length >= 5) {
-                  triggerIds.computeIfAbsent(bucketKey, Sets::newHashSet).add(
+                  triggerIds.computeIfAbsent(bucketKey, k -> Sets.newHashSet()).add(
                       triggerUrlParts[triggerUrlParts.length - 2]);
                 }
               });

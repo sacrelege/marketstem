@@ -2,6 +2,7 @@ package com.marketstem.services.rest;
 
 import com.codahale.metrics.JmxReporter;
 import com.fabahaba.dropwizard.healthchecks.DeploymentResource;
+import com.fabahaba.dropwizard.healthchecks.IgnoreNewRelicHealthCheck;
 import com.fabahaba.dropwizard.healthchecks.RunscopeHealthCheck;
 import com.fabahaba.fava.system.HostUtils;
 import com.fabahaba.runscope.client.RunscopeClient;
@@ -62,6 +63,8 @@ public class MarketstemApplication extends Application<MarketstemConfiguration> 
         RunscopeHealthCheck.startBuilding(runscope, runTestsRateLimiter).build());
 
     environment.healthChecks().register("deployment", DeploymentResource.getResource());
+
+    environment.healthChecks().register("ignoreNewRelic", new IgnoreNewRelicHealthCheck());
   }
 
   private void registerResources(final JerseyEnvironment environment) {

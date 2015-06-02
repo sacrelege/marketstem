@@ -55,19 +55,24 @@ repositories {
 }
 
 dependencies {
+
+	// FRAMEWORK
 	compile 'com.fabahaba:fava:+'
 	compile 'com.fabahaba:byobuckets:+'
-	compile 'com.fabahaba:dropwizard-utils:+'
 	compile 'ch.qos.logback:logback-classic:+'
-
+	
+	// REST
+	compile 'com.fabahaba:dropwizard-utils:+'
+	compile 'io.dropwizard:dropwizard-core:+'
+	compile 'com.palominolabs.metrics:metrics-new-relic:+'
+	
 	// DATABASE
 	compile 'com.fabahaba:jedipus:+'
 
+	// STREAMING
 	compile ('com.fabahaba:simple-kafka:+') {
 		exclude group: 'org.eclipse.jetty'
 	}
-
-	compile 'com.palominolabs.metrics:metrics-new-relic:+'
 
    	// XCHANGE
 	compile 'com.github.mmazi:rescu:+'

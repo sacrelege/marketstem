@@ -60,12 +60,12 @@ dependencies {
 	compile 'com.fabahaba:fava:+'
 	compile 'com.fabahaba:byobuckets:+'
 	compile 'ch.qos.logback:logback-classic:+'
-	
+
 	// REST
 	compile 'com.fabahaba:dropwizard-utils:+'
 	compile 'io.dropwizard:dropwizard-core:+'
 	compile 'com.palominolabs.metrics:metrics-new-relic:+'
-	
+
 	// DATABASE
 	compile 'com.fabahaba:jedipus:+'
 
@@ -75,7 +75,6 @@ dependencies {
 	}
 
    	// XCHANGE
-	compile 'com.github.mmazi:rescu:+'
 	compile group: "com.xeiam.xchange", name: "xchange-core", version: "+", changing: true
 	compile group: "com.xeiam.xchange", name: "xchange-anx", version: "+", changing: true
 	compile group: "com.xeiam.xchange", name: "xchange-bitcurex", version: "+", changing: true
